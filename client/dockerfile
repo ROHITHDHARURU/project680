@@ -1,0 +1,13 @@
+FROM node:14-alpine3.15
+
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
+WORKDIR /usr/src/
+
+COPY . ./
+
+RUN npm install
+
+EXPOSE 3000
+CMD ["npm", "run", "start"]

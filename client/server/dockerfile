@@ -1,0 +1,12 @@
+FROM node:16.18.0-alpine
+
+ENV MONGO_DB_USERNAME=rohith \
+    MONGO_DB_PWD=rohith
+
+WORKDIR /usr/src/server
+
+COPY . ./
+RUN  npm install
+EXPOSE 4000
+
+CMD [ "node", "index.js" ]
