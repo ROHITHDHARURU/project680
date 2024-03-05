@@ -3,7 +3,8 @@ const { User } = require("../models/user");
 
 router.get("/", async (req, res) => {
     try {
-        const email = "1234@gmail.com"//req.params.email; // Retrieve email from query parameters
+       // console.log(req)
+        const email = req.query.email; // "1234@gmail.com" // Retrieve email from query parameters
         console.log(email);
         
         const user = await User.findOne({email});
