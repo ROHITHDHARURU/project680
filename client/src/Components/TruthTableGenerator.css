@@ -1,100 +1,136 @@
 .container {
-    max-width: 1000px; /* Increase max-width for the container */
-    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .input-container {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
-label {
+.input-container label {
     display: block;
     margin-bottom: 5px;
 }
 
-input, select {
+.input-container input,
+.input-container select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    box-sizing: border-box;
 }
 
 .button-container {
     display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-top: 10px;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-button {
-    padding: 10px;
+.generate-button,
+.save-button,
+.history-button {
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     background-color: #007bff;
     color: #fff;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
+.generate-button:hover,
+.save-button:hover,
+.history-button:hover {
     background-color: #0056b3;
 }
 
+.error {
+    color: #dc3545;
+    margin-top: 10px;
+}
+
 .truth-table {
-    margin-top: 20px;
-    overflow-x: auto;
-    width: 100%; /* Ensure the table takes full width */
+    margin-bottom: 20px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
+.history-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: center;
-}
-
-table td {
-    text-align: center;
-}
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #f2f2f2;
+.history-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 .history-container ul {
     list-style-type: none;
     padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-   
 }
 
+.history-container li {
+    margin-bottom: 10px;
+}
+
+.history-container p {
+    margin: 5px 0;
+}
 
 .history-button {
-    pointer-events: auto;
+    padding: 5px 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
+
+.history-button:hover {
+    background-color: #218838;
+}
+
+
+.truth-table {
+    margin-bottom: 20px;
+}
+
+/* New CSS for Truth Table */
+.truth-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.truth-table th,
+.truth-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.truth-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.truth-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.truth-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.truth-table tbody td {
+    border-top: 1px solid #ccc;
+}
+

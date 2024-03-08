@@ -5,10 +5,10 @@ router.get("/", async (req, res) => {
     try {
        // console.log(req)
         const email = req.query.email; // "1234@gmail.com" // Retrieve email from query parameters
-        console.log(email);
+        //console.log(email);
         
         const user = await User.findOne({email});
-        console.log(user);
+        // console.log(user);
         
         if (user) {
             return res.status(200).json(user);

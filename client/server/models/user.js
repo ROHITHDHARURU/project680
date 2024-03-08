@@ -7,8 +7,6 @@ const userSchema = new mongoose.Schema({
 	fullName: { type: String, required: true },
 	email: { type: String, required: true },
 	password: { type: String, required: true },
-	bio:{type:String, required:true},
-	image2:{type:String, required:true},
 	predicatesAndCoverageTypes: [{
 		predicateExpression: String,
 		coverageType: String,
@@ -29,8 +27,6 @@ const validate = (data) => {
 		fullName: Joi.string().required().label("Full Name"),
 		email: Joi.string().email().required().label("Email"),
 		password: passwordComplexity().required().label("Password"),
-		bio: Joi.string().required().label("Bio"),
-		image2: Joi.string().required().label("Image"),
 		//predicateList: [Joi.string.required().label("Enter your expression:"),Joi.string.required().label("Select Coverage Type:")]
 	});
 	return schema.validate(data);

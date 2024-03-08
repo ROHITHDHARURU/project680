@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './TruthTableGenerator.css'; 
+import './TruthTableGenerator.css';
 
 const TruthTableGenerator = () => {
     const [expression, setExpression] = useState('');
@@ -8,6 +8,8 @@ const TruthTableGenerator = () => {
     const [truthTable, setTruthTable] = useState('');
     const [error, setError] = useState('');
     const [historyData, setHistoryData] = useState([]);
+    const [showHistory, setShowHistory] = useState(false);
+    const [actionPerformed, setActionPerformed] = useState(false);
 
     useEffect(() => {
         fetchHistoryData();
@@ -20,20 +22,20 @@ const TruthTableGenerator = () => {
                 setError('User token not found.');
                 return;
             }
-    
+
             const response = await axios.get('http://localhost:4000/api/history', {
                 params: {
                     email: token
                 }
             });
-    
+
             setHistoryData(response.data.predicatesAndCoverageTypes);
         } catch (error) {
             setError('Error fetching history data.');
             console.error('Error fetching history data:', error);
         }
     };
-    
+
     const generateTruthTable = () => {
         const symbols = [...new Set(expression.match(/[A-Za-z]/g))];
 
@@ -53,9 +55,12 @@ const TruthTableGenerator = () => {
             }
 
             setTruthTable(resultTable);
+            setError('');
+            setActionPerformed(true);
         } catch (error) {
             console.error('Error:', error);
             setError('Error generating truth table');
+            setActionPerformed(true);
         }
     };
 
@@ -65,25 +70,28 @@ const TruthTableGenerator = () => {
                 setError('Please enter a predicate before saving.');
                 return;
             }
-    
+
             const response = await axios.post('http://localhost:4000/api/editUsers', {
                 predicateExpression: expression,
                 coverageType: coverageType,
                 email: localStorage.getItem("token")
             });
-    
+
             if (response.status === 200) {
                 console.log('Data saved successfully');
-                setError('Data Saved')
+                setError('Data Saved');
+                fetchHistoryData(); // Refresh history after saving
+                setActionPerformed(true);
             } else {
                 setError('Please login to save your data');
             }
         } catch (error) {
             console.error('Error:', error);
             setError('Error saving data');
+            setActionPerformed(true);
         }
     };
-    
+
     const generatePredicateCoverage = (expression, symbols) => {
         let resultTable = "<table border='1'><thead><tr>";
         symbols.forEach(symbol => {
@@ -182,6 +190,22 @@ const TruthTableGenerator = () => {
         generateTruthTable();
     };
 
+    const toggleHistory = () => {
+        setShowHistory(!showHistory);
+        setActionPerformed(true);
+    };
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        if (/^[A-Za-z&|!()]*$/.test(value) || value === '') {
+            setExpression(value);
+            setError('');
+            setActionPerformed(false);
+        } else {
+            setError("Invalid characters entered. Only letters, &, |, !, (, and ) are allowed.");
+        }
+    };
+
     return (
         <div className="container">
             <h1>Truth Table Generator</h1>
@@ -191,8 +215,8 @@ const TruthTableGenerator = () => {
                     type="text"
                     id="expression"
                     value={expression}
-                    onChange={(e) => setExpression(e.target.value)}
-                    placeholder="e.g., A&B|~C"
+                    onChange={handleInputChange}
+                    placeholder="e.g., A&B|~(C&D)"
                 />
             </div>
             <div className="input-container">
@@ -210,23 +234,26 @@ const TruthTableGenerator = () => {
             <div className="button-container">
                 <button className="generate-button" onClick={generateTruthTable}>Generate Truth Table</button>
                 <button className="save-button" onClick={saveData}>Save Data</button>
+                <button className="history-button" onClick={toggleHistory}>View History</button>
             </div>
-            {error && <p className="error">{error}</p>}
+            {error && !actionPerformed && <p className="error">{error}</p>}
             <div id="truthTable" className="truth-table">
                 <div dangerouslySetInnerHTML={{ __html: truthTable }} />
             </div>
-            <div className="history-container">
-                <h2>History</h2>
-                <ul>
-                    {historyData.map((data, index) => (
-                        <li key={index}>
-                            <p>Predicate Expression: {data.predicateExpression}</p>
-                            <p>Coverage Type: {data.coverageType}</p>
-                            <button className="history-button" onClick={() => generateTruthTableForHistory(data.predicateExpression, data.coverageType)}>Generate Truth Table</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {showHistory && (
+                <div className="history-container">
+                    <h2>History</h2>
+                    <ul>
+                        {historyData.map((data, index) => (
+                            <li key={index}>
+                                <p>Predicate Expression: {data.predicateExpression}</p>
+                                <p>Coverage Type: {data.coverageType}</p>
+                                <button className="history-button" onClick={() => generateTruthTableForHistory(data.predicateExpression, data.coverageType)}>Generate Truth Table</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }
