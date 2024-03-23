@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    image: final_assignment-frontend:latest
+    ports:
+      - "3000:3000"   
+    depends_on:
+      - db
+  nodebackend:
+    build:
+      context: ./server
+      dockerfile: dockerfile
+    image: final_assignment-nodebackend:latest
+    env_file: server/.env
+    ports:
+      - "4000:4000"   
+    depends_on:
+      - db
+  db:
+    volumes:
+      - profile_db:/data/db
+    image: mongo:latest
+    ports:
+      - "27017:27017" 
+volumes:
+  profile_db:

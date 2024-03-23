@@ -1,0 +1,164 @@
+.container {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.input-container {
+    margin-bottom: 10px;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-container input,
+.input-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.generate-button,
+.save-button,
+.history-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.generate-button:hover,
+.save-button:hover,
+.history-button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #dc3545;
+    margin-top: 10px;
+}
+
+.success{
+    color:#28a745;
+    margin-top:10px;
+}
+
+.truth-table {
+    margin-bottom: 20px;
+}
+
+.history-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.history-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.history-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.history-container li {
+    margin-bottom: 10px;
+}
+
+.history-container p {
+    margin: 5px 0;
+}
+
+.history-button {
+    padding: 5px 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.history-button:hover {
+    background-color: #218838;
+}
+
+
+.truth-table {
+    margin-bottom: 20px;
+}
+
+/* New CSS for Truth Table */
+.truth-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.truth-table th,
+.truth-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.truth-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.truth-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.truth-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.truth-table tbody td {
+    border-top: 1px solid #ccc;
+}
+
+.password-criteria-dialog {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    visibility: hidden;
+}
+
+.password-criteria-dialog.open {
+    visibility: visible;
+}
+
+.green {
+    color: green;
+}
