@@ -13,6 +13,6 @@ module.exports = () => {
 		console.log(process.env.DATABASE_ACCESS)
 	} catch (error) {
 		console.log(error);
-		console.log("Could not to connect database!");
+		console.log("Error connecting to database!");
 	}
 };
