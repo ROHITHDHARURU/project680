@@ -162,3 +162,25 @@
 .green {
     color: green;
 }
+
+.forgot-pass-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.forgot-pass-title {
+    text-align: center;
+    color: #343a40;
+}
+
+.forgot-pass-form {
+    margin-top: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}
