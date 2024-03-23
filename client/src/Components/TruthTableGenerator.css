@@ -54,6 +54,11 @@
     margin-top: 10px;
 }
 
+.success{
+    color:#28a745;
+    margin-top:10px;
+}
+
 .truth-table {
     margin-bottom: 20px;
 }
@@ -134,3 +139,26 @@
     border-top: 1px solid #ccc;
 }
 
+.password-criteria-dialog {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    visibility: hidden;
+}
+
+.password-criteria-dialog.open {
+    visibility: visible;
+}
+
+.green {
+    color: green;
+}

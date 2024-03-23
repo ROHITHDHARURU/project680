@@ -9,9 +9,13 @@ const TruthTableGenerator = () => {
     const [error, setError] = useState('');
     const [historyData, setHistoryData] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
+    const [hideHistory, setHideHistory] = useState(false);
     const [actionPerformed, setActionPerformed] = useState(false);
+    const [succActionPerformed, setSuccActionPerformed]=useState(false)
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
+        setError('');
         fetchHistoryData();
     }, []);
 
@@ -19,7 +23,7 @@ const TruthTableGenerator = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                setError('User token not found.');
+                setError('Warning!. Please Sign In to save your work!!!');
                 return;
             }
 
@@ -56,6 +60,7 @@ const TruthTableGenerator = () => {
 
             setTruthTable(resultTable);
             setError('');
+            setSuccessMessage('');
             setActionPerformed(true);
         } catch (error) {
             console.error('Error:', error);
@@ -64,33 +69,45 @@ const TruthTableGenerator = () => {
         }
     };
 
-    const saveData = async () => {
-        try {
-            if (!expression) {
-                setError('Please enter a predicate before saving.');
-                return;
-            }
 
-            const response = await axios.post('http://localhost:4000/api/editUsers', {
-                predicateExpression: expression,
-                coverageType: coverageType,
-                email: localStorage.getItem("token")
-            });
 
-            if (response.status === 200) {
-                console.log('Data saved successfully');
-                setError('Data Saved');
-                fetchHistoryData(); // Refresh history after saving
-                setActionPerformed(true);
-            } else {
-                setError('Please login to save your data');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setError('Error saving data');
-            setActionPerformed(true);
+const saveData = async () => {
+    try {
+        const email = localStorage.getItem('token');
+        if (!expression) {
+            setError('Please enter a predicate before saving.');
+            return;
         }
-    };
+        if (!email) {
+            setError('Please SignIn to save your work');
+            return;
+        }
+
+        const response = await axios.post('http://localhost:4000/api/editUsers', {
+            predicateExpression: expression,
+            coverageType: coverageType,
+            email: localStorage.getItem("token")
+        });
+
+        console.log('Save data response:', response.data); // Log response data
+
+        if (response.data) {
+            setSuccessMessage('Data saved successfully'); // Set success message
+           setActionPerformed(true);
+           setSuccActionPerformed(false);
+            console.log('Data saved successfully');
+            fetchHistoryData(); // Refresh history after saving
+        } else {
+            setError('Please login to save your data');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        setError('Error saving data');
+        setActionPerformed(true);
+    }
+};
+
+
 
     const generatePredicateCoverage = (expression, symbols) => {
         let resultTable = "<table border='1'><thead><tr>";
@@ -184,39 +201,51 @@ const TruthTableGenerator = () => {
         return eval(expression);
     };
 
+   
     const generateTruthTableForHistory = (predicateExpression, coverageType) => {
         setExpression(predicateExpression);
         setCoverageType(coverageType);
         generateTruthTable();
     };
-
+    
     const toggleHistory = () => {
         setShowHistory(!showHistory);
         setActionPerformed(true);
+        setHideHistory(true);
+        setSuccActionPerformed(true);
     };
-
+    
+    const hideHistoryView = () => {
+        setShowHistory(false);
+        setHideHistory(false);
+        setActionPerformed(true);
+        setSuccActionPerformed(true);
+    };
+    
     const handleInputChange = (e) => {
         const value = e.target.value;
         if (/^[A-Za-z&|!()]*$/.test(value) || value === '') {
             setExpression(value);
             setError('');
+            setSuccessMessage('');
             setActionPerformed(false);
         } else {
             setError("Invalid characters entered. Only letters, &, |, !, (, and ) are allowed.");
         }
     };
-
+    
     return (
         <div className="container">
             <h1>Truth Table Generator</h1>
             <div className="input-container">
                 <label htmlFor="expression">Enter your expression:</label>
+                <label htmlFor="expression">Note: Expression field has certain limitations, such as it can accept only literals like &, |, and ! (and, or, not). Predicate has to be entered without any spaces.</label>
                 <input
                     type="text"
                     id="expression"
                     value={expression}
                     onChange={handleInputChange}
-                    placeholder="e.g., A&B|~(C&D)"
+                    placeholder="e.g., A&B|!(C|D)"
                 />
             </div>
             <div className="input-container">
@@ -234,9 +263,15 @@ const TruthTableGenerator = () => {
             <div className="button-container">
                 <button className="generate-button" onClick={generateTruthTable}>Generate Truth Table</button>
                 <button className="save-button" onClick={saveData}>Save Data</button>
-                <button className="history-button" onClick={toggleHistory}>View History</button>
+                {!hideHistory && (
+                    <button className="history-button" onClick={toggleHistory}>View History</button>
+                )}
+                {hideHistory && (
+                    <button className="history-button" onClick={hideHistoryView}>Hide History</button>
+                )}
             </div>
             {error && !actionPerformed && <p className="error">{error}</p>}
+            {successMessage && !succActionPerformed && <p className="success">{successMessage}</p>}
             <div id="truthTable" className="truth-table">
                 <div dangerouslySetInnerHTML={{ __html: truthTable }} />
             </div>
@@ -256,6 +291,7 @@ const TruthTableGenerator = () => {
             )}
         </div>
     );
-}
-
-export default TruthTableGenerator;
+    };
+    
+    export default TruthTableGenerator;
+    

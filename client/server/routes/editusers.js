@@ -8,7 +8,7 @@ router.post("/", async(req, res) =>
 
   try {
     const { email, predicateExpression, coverageType } = req.body;
-    
+    console.log(req.body)
     // Find user by username
     let user = await User.findOne({ email });
 
