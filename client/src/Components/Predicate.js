@@ -109,76 +109,80 @@ const saveData = async () => {
 
 
 
-    const generatePredicateCoverage = (expression, symbols) => {
-        let resultTable = "<table border='1'><thead><tr>";
-        symbols.forEach(symbol => {
-            resultTable += "<th>" + symbol + "</th>";
+const generatePredicateCoverage = (expression, symbols) => {
+    let resultTable = "<table border='1'><thead><tr>";
+    symbols.forEach(symbol => {
+        resultTable += "<th>" + symbol + "</th>";
+    });
+    resultTable += "<th>Result</th></tr></thead><tbody>";
+
+    const truthValues = generateTruthValues(symbols.length);
+    truthValues.forEach(truthRow => {
+        let evaluation = evaluateExpression(expression, symbols, truthRow);
+        resultTable += "<tr>";
+        truthRow.forEach(value => {
+            resultTable += "<td class='" + (value ? 'true' : 'false') + "'>" + (value ? "T" : "F") + "</td>";
         });
-        resultTable += "<th>Result</th></tr></thead><tbody>";
+        resultTable += "<td class='" + (evaluation ? 'true' : 'false') + "'>" + (evaluation ? "T" : "F") + "</td></tr>";
+    });
+    resultTable += "</tbody></table>";
+    return resultTable;
+};
+
+
+
+
+const generateCombinatorialCoverage = (expression, symbols) => {
+    let resultTable = "<table border='1'><thead><tr>";
+    symbols.forEach(symbol => {
+        resultTable += "<th>" + symbol + "</th>";
+    });
+    resultTable += "<th>Result</th></tr></thead><tbody>";
+
+    const truthValues = generateTruthValues(symbols.length);
+    truthValues.forEach(truthRow => {
+        const evaluation = evaluateExpression(expression, symbols, truthRow);
+        resultTable += "<tr>";
+        truthRow.forEach(value => {
+            resultTable += "<td class='" + (value ? 'true' : 'false') + "'>" + (value ? "T" : "F") + "</td>";
+        });
+        resultTable += "<td class='" + (evaluation ? 'true' : 'false') + "'>" + (evaluation ? "T" : "F") + "</td></tr>";
+    });
+    resultTable += "</tbody></table>";
+    return resultTable;
+};
+
+const generateActiveClauseCoverage = (expression, symbols) => {
+    const clauses = expression.split(/[&|]/);
+    let resultTable = "<table border='1'><thead><tr>";
+    symbols.forEach(symbol => {
+        resultTable += "<th>" + symbol + "</th>";
+    });
+    resultTable += "<th>Result</th></tr></thead><tbody>";
+
+    for (let i = 0; i < clauses.length; i++) {
+        const activeClause = clauses[i].trim();
+        const inactiveClauses = [...clauses.slice(0, i), ...clauses.slice(i + 1)];
+
+        let modifiedExpression = expression.replace(activeClause, "1");
+        inactiveClauses.forEach(clause => {
+            modifiedExpression = modifiedExpression.replace(clause, "0");
+        });
 
         const truthValues = generateTruthValues(symbols.length);
         truthValues.forEach(truthRow => {
-            let evaluation = evaluateExpression(expression, symbols, truthRow);
+            const evaluation = evaluateExpression(modifiedExpression, symbols, truthRow);
             resultTable += "<tr>";
             truthRow.forEach(value => {
-                resultTable += "<td>" + (value ? "T" : "F") + "</td>";
+                resultTable += "<td class='" + (value ? 'true' : 'false') + "'>" + (value ? "T" : "F") + "</td>";
             });
-            resultTable += "<td>" + (evaluation ? "T" : "F") + "</td></tr>";
+            resultTable += "<td class='" + (evaluation ? 'true' : 'false') + "'>" + (evaluation ? "T" : "F") + "</td></tr>";
         });
-        resultTable += "</tbody></table>";
-        return resultTable;
-    };
+    }
+    resultTable += "</tbody></table>";
+    return resultTable;
+};
 
-    const generateCombinatorialCoverage = (expression, symbols) => {
-        let resultTable = "<table border='1'><thead><tr>";
-        symbols.forEach(symbol => {
-            resultTable += "<th>" + symbol + "</th>";
-        });
-        resultTable += "<th>Result</th></tr></thead><tbody>";
-
-        const truthValues = generateTruthValues(symbols.length);
-        truthValues.forEach(truthRow => {
-            const evaluation = evaluateExpression(expression, symbols, truthRow);
-            resultTable += "<tr>";
-            truthRow.forEach(value => {
-                resultTable += "<td>" + (value ? "T" : "F") + "</td>";
-            });
-            resultTable += "<td>" + (evaluation ? "T" : "F") + "</td></tr>";
-        });
-        resultTable += "</tbody></table>";
-        return resultTable;
-    };
-
-    const generateActiveClauseCoverage = (expression, symbols) => {
-        const clauses = expression.split(/[&|]/);
-        let resultTable = "<table border='1'><thead><tr>";
-        symbols.forEach(symbol => {
-            resultTable += "<th>" + symbol + "</th>";
-        });
-        resultTable += "<th>Result</th></tr></thead><tbody>";
-
-        for (let i = 0; i < clauses.length; i++) {
-            const activeClause = clauses[i].trim();
-            const inactiveClauses = [...clauses.slice(0, i), ...clauses.slice(i + 1)];
-
-            let modifiedExpression = expression.replace(activeClause, "1");
-            inactiveClauses.forEach(clause => {
-                modifiedExpression = modifiedExpression.replace(clause, "0");
-            });
-
-            const truthValues = generateTruthValues(symbols.length);
-            truthValues.forEach(truthRow => {
-                const evaluation = evaluateExpression(modifiedExpression, symbols, truthRow);
-                resultTable += "<tr>";
-                truthRow.forEach(value => {
-                    resultTable += "<td>" + (value ? "T" : "F") + "</td>";
-                });
-                resultTable += "<td>" + (evaluation ? "T" : "F") + "</td></tr>";
-            });
-        }
-        resultTable += "</tbody></table>";
-        return resultTable;
-    };
 
     const generateTruthValues = (numSymbols) => {
         const values = [];

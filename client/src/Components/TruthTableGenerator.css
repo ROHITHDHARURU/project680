@@ -184,3 +184,12 @@
 .alert {
     margin-top: 20px;
 }
+
+.true {
+    color: green; /* Change color for true values */
+}
+
+.false {
+    color: red; /* Change color for false values */
+}
+
