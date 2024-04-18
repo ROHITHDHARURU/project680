@@ -40,11 +40,11 @@ const Login = () => {
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input type="password" name="password" id="password" value={data.password} className="form-control" onChange={handleChange} required />
                                 </div>
-                                {error && <div className="alert alert-danger">{error}</div>}
-                                <button type="submit" className="btn btn-primary btn-block mt-4">Sign in</button>
+                                {error && <div name="error-alert" className="alert alert-danger">{error}</div>}
+                                <button type="submit" id="submit" className="btn btn-primary btn-block mt-4">Sign in</button>
                             </form>
                             <p className="text-center mt-3">Not a member? <a href="/signup">Register</a></p>
-							<p className="text-center mt-3">Forgot Password? <a href="/forgot-password">Click Here</a></p>
+							<p className="text-center mt-3"  >Forgot Password? <a name="forgot-password"  href="/forgot-password">Click Here</a></p>
                         </div>
                     </div>
                 </div>

@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 
 const Header = () => {
   const [logoutTimer, setLogoutTimer] = useState(null);
+  //token to storage for session creation
   const token = localStorage.getItem("token");
+  //cached fullName to display it in the header for the user, when the user is logged in
   const fullName=localStorage.getItem("fullName");
 
   const handleLogout = () => {
-    localStorage.removeItem("fullName"); // Remove token from localStorage
-    localStorage.removeItem("token")
+    localStorage.removeItem("fullName"); // Remove fullname from localStorage
+    localStorage.removeItem("token") //remove token from localstorage
     clearTimeout(logoutTimer); // Clear the logout timer
     window.location.replace('/predicate'); // Redirect to login page
   };
 
   const resetLogoutTimer = () => {
     clearTimeout(logoutTimer); // Clear the previous timer
-    const newLogoutTimer = setTimeout(handleLogout, 30 * 60 * 1000); // Set new logout timer for 5 minutes
+    const newLogoutTimer = setTimeout(handleLogout, 30 * 60 * 1000); // Set new logout timer for 30 minutes
     setLogoutTimer(newLogoutTimer);
   };
 
@@ -23,7 +25,7 @@ const Header = () => {
     const resetTimerOnActivity = () => {
       resetLogoutTimer();
     };
-
+    //read user activity
     window.addEventListener('mousemove', resetTimerOnActivity);
     window.addEventListener('keypress', resetTimerOnActivity);
 
@@ -42,7 +44,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg bg-success">
       <div className="container-fluid">
         {fullName ? (
-          <a className="navbar-brand text-light" href="/predicate">Welcome - {fullName}</a>
+          <a className="navbar-brand text-light"  name="id_fullName" href="/predicate">Welcome - {fullName}</a>
         ) : (
           <a className="navbar-brand text-light" href="/login"></a>
         )}
@@ -52,13 +54,13 @@ const Header = () => {
         <div className="collapse navbar-collapse " id="navbarNav">
           <ul className="navbar-nav d-flex align-items-center">
             <li className="nav-item">
-              <a className="nav-link text-light" href="/signup">SignUp</a>
+              <a className="nav-link text-light" id="signup_button" href="/signup">SignUp</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-light" href="/login">SignIn</a>
+              <a className="nav-link text-light" id="signin_button" href="/login">SignIn</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-light" href="/predicate">TruthTableGenerator</a>
+              <a className="nav-link text-light" id="truth_table_generator_button" href="/predicate">TruthTableGenerator</a>
             </li>
             {token && (
               <li className="nav-item">

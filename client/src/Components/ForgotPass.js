@@ -95,7 +95,7 @@ const ForgotPass = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             {isLoading && <div className="alert alert-info">Please wait...</div>}
             {redirecting && (
-                <div className="alert alert-info">Redirecting to login page...</div>
+                <div  name="redirect_message" className="alert alert-info">Redirecting to login page...</div>
             )}
             {!redirecting && (
                 <form onSubmit={handleSubmit} className="forgot-pass-form">
@@ -132,7 +132,7 @@ const ForgotPass = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">Reset Password</button>
+                    <button name="reset_button" type="submit" className="btn btn-primary">Reset Password</button>
                 </form>
             )}
             {/* Render the PasswordCriteriaDialog component */}

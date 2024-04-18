@@ -73,6 +73,7 @@ const TruthTableGenerator = () => {
 
 const saveData = async () => {
     try {
+        setError('');
         const email = localStorage.getItem('token');
         if (!expression) {
             setError('Please enter a predicate before saving.');
@@ -213,6 +214,12 @@ const generateActiveClauseCoverage = (expression, symbols) => {
     };
     
     const toggleHistory = () => {
+        const token= localStorage.getItem('token')
+        if(!token){
+            setError('Please login to your account to view history');
+            return
+        }
+        
         setShowHistory(!showHistory);
         setActionPerformed(true);
         setHideHistory(true);
@@ -224,6 +231,7 @@ const generateActiveClauseCoverage = (expression, symbols) => {
         setHideHistory(false);
         setActionPerformed(true);
         setSuccActionPerformed(true);
+        setError('');
     };
     
     const handleInputChange = (e) => {
