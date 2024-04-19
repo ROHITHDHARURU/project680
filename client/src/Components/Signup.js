@@ -22,7 +22,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const url = 'http://localhost:4000/api/users';
+            const url = 'http://54.86.131.81:4000/api/users';
             const { data: res } = await axios.post(url, data);
             setSignupSuccess(true);
             setTimeout(() => {

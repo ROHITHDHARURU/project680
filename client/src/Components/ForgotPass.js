@@ -41,7 +41,7 @@ const ForgotPass = () => {
         }
 
         try {
-            const url = "http://localhost:4000/api/forgot-password";
+            const url = "http://54.86.131.81:4000/api/forgot-password";
             const { data } = await axios.post(url, formData);
             setSuccessMessage(data.message);
             setError("");

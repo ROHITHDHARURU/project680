@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './TruthTableGenerator.css';
 
 const Header = () => {
   const [logoutTimer, setLogoutTimer] = useState(null);
@@ -60,11 +61,11 @@ const Header = () => {
               <a className="nav-link text-light" id="signin_button" href="/login">SignIn</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-light" id="truth_table_generator_button" href="/predicate">TruthTableGenerator</a>
+              <a className="nav-link text-light" id="truth_table_generator_button" href="/predicate">LogicCoverage</a>
             </li>
             {token && (
               <li className="nav-item">
-                <button className="nav-item mr nav-link p-2" onClick={handleLogout}>Logout</button>
+                <button className="logout" onClick={handleLogout}>Logout</button>
               </li>
             )}
           </ul>
