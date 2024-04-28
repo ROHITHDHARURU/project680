@@ -17,11 +17,16 @@ app.use(express.json());
 app.use(cors());
 
 // routes
+//signup page api
 app.use("/api/users", userRoutes);
+//save login and retrieve user
 app.use("/api/auth", authRoutes);
+
 app.use("/api/editusers",editUsersRoutes);
+//update the history
 app.use("/api/history",historyRoutes);
+//api to update then password
 app.use("/api/forgot-password", forgotPassRoutes);
 
-
+//port to be used - 4000
 app.listen(4000, console.log(`Listening on port 4000...`));

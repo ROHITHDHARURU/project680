@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './TruthTableGenerator.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const TruthTableGenerator = () => {
     const [expression, setExpression] = useState('');
     const [coverageType, setCoverageType] = useState('Predicate Coverage');
     const [truthTable, setTruthTable] = useState('');
-    const [testCases, setTestCases] = useState([]); // State to store generated test cases
+    const [testCases, setTestCases] = useState([]);
     const [error, setError] = useState('');
     const [historyData, setHistoryData] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
@@ -14,6 +16,7 @@ const TruthTableGenerator = () => {
     const [actionPerformed, setActionPerformed] = useState(false);
     const [succActionPerformed, setSuccActionPerformed] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [coverageInfoVisible, setCoverageInfoVisible] = useState(false);
 
     useEffect(() => {
         setError('');
@@ -171,17 +174,17 @@ const TruthTableGenerator = () => {
     const generateActiveClauseCoverageTestCases = (expression, symbols) => {
         const result = [];
     
-        // Go through each variable
+        // iterate thru each variable
         for (let k = 0; k < symbols.length; k++) {
             const t = []; // List storing row numbers where the corresponding predicate is true
             const f = []; // List storing row numbers where the corresponding predicate is false
     
-            // Go through each row of the truth table
+            // iterate through all the rows of the truth table
             for (let i = 0; i < Math.pow(2, symbols.length); i++) {
                 const truthRow = generateTruthRow(symbols.length, i);
                 const expressionResult = evaluateExpression(expression, symbols, truthRow);
     
-                // Calculate P (x = true) and P (x = false) for the current variable
+                
                 const tvar = evaluateExpression(expression, symbols, truthRow.map((value, index) => index === k ? true : value));
                 const fvar = evaluateExpression(expression, symbols, truthRow.map((value, index) => index === k ? false : value));
     
@@ -199,7 +202,7 @@ const TruthTableGenerator = () => {
             const gacc = [];
 
 
-            // Take the matched elements from t and f lists and put them into gacc
+            // Take the matched elements from t and f lists and add it to gacc list
             for (let i = 0; i < t.length; i++) {
                 for (let j = 0; j < f.length; j++) {
                     gacc.push(`(${t[i] + 1}, ${f[j] + 1})`); // Adjusting row numbers to start from 1 and appending clause name
@@ -315,6 +318,10 @@ const TruthTableGenerator = () => {
         setError('');
     };
 
+    const handleCoverageInfoClick = () => {
+        setCoverageInfoVisible(!coverageInfoVisible);
+    };
+
     const handleInputChange = (e) => {
         const value = e.target.value;
         if (/^[A-Za-z&|!()]*$/.test(value) || value === '') {
@@ -329,7 +336,7 @@ const TruthTableGenerator = () => {
 
     return (
         <div className="container">
-            <h1>Truth Table Generator</h1>
+            <h2>Logic Coverage and Tests Generator</h2>
             <div className="input-container">
                 <label htmlFor="expression">Enter your expression:</label>
                 <label htmlFor="expression">Note: Expression field has certain limitations, such as it can accept only literals like &, |, and ! (and, or, not). Predicate has to be entered without any spaces.</label>
@@ -342,7 +349,12 @@ const TruthTableGenerator = () => {
                 />
             </div>
             <div className="input-container">
-                <label htmlFor="coverageType">Select Test Coverage Type:</label>
+                <label htmlFor="coverageType">Select Test Coverage Type: <FontAwesomeIcon
+                        icon={faInfoCircle}
+                        className="info-icon"
+                        onClick={handleCoverageInfoClick}
+                    />
+                    </label>
                 <label htmlFor="coverageType">Note: By Default Tests would be generated for the Predicate Coverage.</label>
                 <select
                     id="coverageType"
@@ -366,6 +378,16 @@ const TruthTableGenerator = () => {
             </div>
             {error && !actionPerformed && <p className="error">{error}</p>}
             {successMessage && !succActionPerformed && <p className="success">{successMessage}</p>}
+            {coverageInfoVisible && (
+                <div className="coverage-info">
+                    <h2>Coverage Types Information</h2>
+                    <ul>
+                        <li><strong>Predicate Coverage:</strong> Predicate coverage aims to execute each predicate in the code to true and false at least once.</li>
+                        <li><strong>Combinatorial Coverage:</strong> Combinatorial coverage, also known as pair-wise coverage, aims to cover all possible combinations of inputs in the code.</li>
+                        <li><strong>Active Clause Coverage:</strong> Active clause coverage aims to cover each clause in the code, considering them independently and provide such pairs for each clause.</li>
+                    </ul>
+                </div>
+            )}
             <div id="truthTable" className="truth-table">
                 <div dangerouslySetInnerHTML={{ __html: truthTable }} />
                 {actionPerformed && ( /* Conditionally render "Test Cases" only when actionPerformed is true */

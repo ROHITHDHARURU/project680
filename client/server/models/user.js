@@ -3,10 +3,15 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
+//schema for the database to pertain the necessary values obtained from the user
 const userSchema = new mongoose.Schema({
+	//full name of the user
 	fullName: { type: String, required: true },
+	//email:unique - to identify the user
 	email: { type: String, required: true },
+	//password to access the account
 	password: { type: String, required: true },
+	//list of the expressions tests used by the user and also the coverage type used
 	predicatesAndCoverageTypes: [{
 		predicateExpression: String,
 		coverageType: String,
@@ -20,6 +25,7 @@ userSchema.methods.generateAuthToken = function () {
 	return token;
 };
 
+//create the declared user schema
 const User = mongoose.model("user", userSchema);
 
 const validate = (data) => {
