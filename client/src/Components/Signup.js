@@ -22,7 +22,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const url = 'http://localhost:4000/api/users';
+            const url = 'http://54.86.131.81:4000/api/users';
             const { data: res } = await axios.post(url, data);
             setSignupSuccess(true);
             setTimeout(() => {
@@ -71,15 +71,15 @@ const Signup = () => {
                                             <input type="password" name="password" className="form-control form-control-lg" placeholder="Enter your password" onChange={handlePasswordChange} value={data.password} required />
                                         </div>
                                     </div>
-                                    {error && <div className="form-outline mb-4 text-danger">{error}</div>}
+                                    {error && <div name="error-alert" className="form-outline mb-4 text-danger">{error}</div>}
                                     {signupSuccess && (
-                                        <div className="alert alert-success" role="alert">
+                                        <div className="alert alert-success" id="success_alert" role="alert" value="Signup successful! Redirecting to SignIn page...">
                                             Signup successful! Redirecting to SignIn page...
                                         </div>
                                     )}
                                     <hr className="mx-n3" />
                                     <div className="px-5 py-4">
-                                        <button type="submit" className="btn btn-primary btn-lg">Sign Up</button>
+                                        <button type="submit"  name="submit" className="btn btn-primary btn-lg">Sign Up</button>
                                     </div>
                                 </div>
                             </div>
